@@ -1,0 +1,921 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  color: #3b2415;
+  font-family: Georgia, serif;
+
+  background: linear-gradient(
+    to bottom,
+    #f7c46b 0%,
+    #f29a67 35%,
+    #d8756d 65%,
+    #8f7180 100%
+  );
+
+  overflow-x: hidden;
+}
+
+button,
+input {
+  font-family: Georgia, serif;
+}
+
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
+.game,
+.map-page {
+  min-height: 100vh;
+  width: 100%;
+  padding: 35px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+/* =========================================================
+   OPENING SCREEN
+   ========================================================= */
+
+.opening-screen {
+  justify-content: center;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: #704638;
+}
+
+h1 {
+  margin: 10px 0 30px;
+
+  font-size: clamp(2.5rem, 10vw, 5.2rem);
+  line-height: 1;
+  letter-spacing: 5px;
+
+  color: #45352c;
+
+  text-align: center;
+}
+
+.clue {
+  width: 100%;
+  max-width: 500px;
+
+  margin: 0 auto 30px;
+
+  font-size: 1.2rem;
+  line-height: 1.8;
+
+  text-align: center;
+}
+
+input {
+  display: block;
+
+  width: 100%;
+  max-width: 450px;
+
+  margin: 0 auto;
+
+  padding: 16px;
+
+  border: 2px solid #8c5b36;
+  border-radius: 5px;
+
+  background: rgba(255, 248, 225, 0.9);
+  color: #3b2415;
+
+  text-align: center;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #5c351e;
+}
+
+button {
+  display: block;
+
+  border: none;
+  border-radius: 5px;
+
+  background: #704638;
+  color: #fff4dc;
+
+  padding: 15px 35px;
+  margin: 15px auto 0;
+
+  font-weight: bold;
+  letter-spacing: 2px;
+
+  cursor: pointer;
+
+  transition: transform 0.15s, background 0.15s;
+}
+
+button:hover {
+  background: #875746;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error {
+  margin: 18px auto 0;
+
+  color: #8a241c;
+  font-weight: bold;
+
+  text-align: center;
+}
+
+/* =========================================================
+   MAP / PARCHMENT
+   ========================================================= */
+
+.map-page {
+  position: relative;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 238, 190, 0.95) 0%,
+    rgba(224, 181, 112, 0.95) 70%,
+    rgba(153, 101, 54, 0.92) 100%
+  );
+
+  max-width: 850px;
+
+  margin: 20px auto;
+
+  border: 10px solid #704421;
+
+  box-shadow: 0 0 0 4px #c28b4b, 0 12px 30px rgba(55, 30, 15, 0.4);
+}
+
+.map-page::before {
+  content: '';
+
+  position: absolute;
+
+  inset: 15px;
+
+  border: 2px solid rgba(92, 53, 30, 0.35);
+
+  pointer-events: none;
+}
+
+.map-header {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+
+  margin-bottom: 20px;
+
+  text-align: center;
+}
+
+.map-header h1 {
+  margin-bottom: 10px;
+}
+
+.map-header p {
+  margin: 0 auto;
+
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* =========================================================
+   WOODEN DOORS — ALWAYS 4 × 3
+   ========================================================= */
+
+.doors {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 650px;
+
+  margin: 20px auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  grid-template-rows: repeat(3, auto);
+
+  gap: 22px;
+
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+.door {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 0.68;
+
+  margin: 0;
+  padding: 0;
+
+  border: 5px solid #5b351d;
+  border-radius: 45% 45% 4px 4px;
+
+  background: repeating-linear-gradient(
+      90deg,
+      rgba(54, 28, 12, 0.13) 0px,
+      rgba(54, 28, 12, 0.13) 3px,
+      transparent 3px,
+      transparent 15px
+    ),
+    linear-gradient(
+      90deg,
+      #77431f,
+      #a96635 22%,
+      #8a4e27 45%,
+      #b06d3c 65%,
+      #78431f
+    );
+
+  box-shadow: inset 0 0 0 2px rgba(255, 220, 160, 0.25),
+    5px 7px 0 rgba(65, 35, 18, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #f2dfae;
+}
+
+.door::before {
+  content: '';
+
+  position: absolute;
+
+  inset: 9px;
+
+  border: 2px solid rgba(55, 28, 12, 0.5);
+  border-radius: 38% 38% 2px 2px;
+
+  pointer-events: none;
+}
+
+.door::after {
+  content: '';
+
+  position: absolute;
+
+  width: 8px;
+  height: 8px;
+
+  right: 17px;
+  top: 50%;
+
+  border-radius: 50%;
+
+  background: #3d2413;
+
+  box-shadow: inset 1px 1px 2px rgba(255, 220, 150, 0.4);
+}
+
+.door-number {
+  position: relative;
+  z-index: 2;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  font-weight: bold;
+
+  color: #ead9a9;
+
+  transform: rotate(-3deg);
+
+  text-shadow: 1px 1px 0 #6b4326, -1px -1px 0 rgba(255, 245, 210, 0.35);
+
+  text-align: center;
+}
+
+.door.completed .door-number {
+  color: #00a83c;
+  opacity: 1;
+}
+
+.door.completed .door-number {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  color: #dce8bd;
+  transform: rotate(-5deg);
+}
+
+.door-complete {
+  position: absolute;
+
+  bottom: 12px;
+
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+
+  color: #e2ddb5;
+
+  text-align: center;
+}
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progress {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+
+  margin: 15px auto 0;
+
+  font-weight: bold;
+  letter-spacing: 2px;
+
+  color: #65401f;
+
+  text-align: center;
+}
+
+.final-button {
+  position: relative;
+  z-index: 2;
+
+  margin: 25px auto 0;
+
+  background: #4f321b;
+}
+
+.final-button:hover {
+  background: #694421;
+}
+
+/* =========================================================
+   STAGE PAGE
+   ========================================================= */
+
+.stage-page {
+  justify-content: flex-start;
+}
+
+.back-button {
+  align-self: center;
+
+  position: relative;
+  z-index: 3;
+
+  margin: 0 auto 15px;
+
+  padding: 10px 18px;
+
+  background: transparent;
+  color: #5b351d;
+
+  border: 1px solid #80552e;
+
+  letter-spacing: 1px;
+}
+
+.back-button:hover {
+  background: rgba(255, 240, 190, 0.5);
+}
+
+.stage-content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 650px;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.stage-number {
+  width: 65px;
+  height: 65px;
+
+  margin: 10px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #65401f;
+  color: #f2dfae;
+
+  font-size: 2rem;
+  font-weight: bold;
+
+  box-shadow: 0 3px 6px rgba(50, 25, 10, 0.3);
+}
+
+.stage-content h1 {
+  width: 100%;
+
+  margin: 10px auto 25px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   LOCATION / QUESTION / HISTORY
+   ========================================================= */
+
+.location-box,
+.question-box,
+.history-box,
+.answer-record {
+  width: 100%;
+
+  padding: 22px;
+
+  margin: 0 auto 18px;
+
+  border: 2px solid rgba(103, 63, 28, 0.45);
+
+  background: rgba(255, 239, 193, 0.55);
+
+  box-shadow: inset 0 0 15px rgba(103, 63, 28, 0.08);
+
+  text-align: center;
+}
+
+.location-icon,
+.question-icon {
+  font-size: 2rem;
+}
+
+.location-box h2,
+.question-box h2,
+.history-box h3 {
+  margin: 8px 0;
+
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+
+  text-align: center;
+}
+
+.location-box p,
+.question-box p,
+.history-box p {
+  line-height: 1.7;
+
+  text-align: center;
+}
+
+/* =========================================================
+   ANSWER AREA
+   ========================================================= */
+
+.answer-area {
+  width: 100%;
+
+  margin: 20px auto 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.answer-area > p {
+  width: 100%;
+
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+
+  text-align: center;
+}
+
+.answer-area input {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.answer-area button {
+  display: block;
+
+  margin: 15px auto 0;
+}
+
+/* =========================================================
+   COMPLETED STAGE
+   ========================================================= */
+
+.success-mark {
+  width: 70px;
+  height: 70px;
+
+  margin: 10px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #426b35;
+  color: white;
+
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.completed-content {
+  width: 100%;
+
+  text-align: center;
+}
+
+.completed-content h2 {
+  letter-spacing: 2px;
+
+  text-align: center;
+}
+
+.answer-record {
+  text-align: center;
+}
+
+.answer-record > div {
+  margin-bottom: 20px;
+}
+
+.answer-record > div:last-child {
+  margin-bottom: 0;
+}
+
+.answer-record span {
+  display: block;
+
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+
+  color: #6c4321;
+
+  text-align: center;
+}
+
+.answer-record p {
+  margin: 7px 0 0;
+
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+/* =========================================================
+   CAMERA / PHOTO
+   ========================================================= */
+
+.camera-area {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.camera-area video,
+.camera-area img {
+  display: block;
+
+  width: 100%;
+  max-width: 500px;
+
+  margin: 15px auto;
+
+  border: 3px solid #704421;
+}
+
+.camera-area button {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.approval-box {
+  width: 100%;
+
+  margin: 20px auto;
+  padding: 22px;
+
+  border: 2px solid #704421;
+
+  background: rgba(255, 239, 193, 0.7);
+
+  text-align: center;
+}
+
+.approval-box input {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.approval-box button {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================================================
+   FINAL SCREEN
+   ========================================================= */
+
+.final-panel {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin: 0 auto;
+
+  padding: 35px 25px;
+
+  text-align: center;
+}
+
+.final-icon {
+  font-size: 4rem;
+}
+
+.final-panel h2 {
+  letter-spacing: 2px;
+
+  text-align: center;
+}
+
+.what3words {
+  width: 100%;
+
+  margin: 25px auto;
+  padding: 20px;
+
+  border: 2px dashed #76502b;
+
+  background: rgba(255, 239, 193, 0.6);
+
+  text-align: center;
+}
+
+.what3words p {
+  margin: 0 0 10px;
+
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: bold;
+
+  text-align: center;
+}
+
+.what3words strong {
+  font-size: 1.3rem;
+
+  text-align: center;
+}
+
+.final-instruction {
+  line-height: 1.7;
+
+  text-align: center;
+}
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+.admin-panel {
+  position: relative;
+  z-index: 10;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin: 25px auto 0;
+  padding: 25px;
+
+  border: 3px solid #704421;
+
+  background: rgba(255, 239, 193, 0.95);
+
+  box-shadow: 0 8px 20px rgba(55, 30, 15, 0.3);
+
+  text-align: center;
+}
+
+.admin-panel h2 {
+  margin-top: 0;
+
+  letter-spacing: 3px;
+
+  text-align: center;
+}
+
+.admin-panel input {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-controls {
+  width: 100%;
+
+  margin-top: 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.admin-controls > div {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid rgba(103, 63, 28, 0.25);
+
+  text-align: center;
+}
+
+.admin-controls span {
+  font-weight: bold;
+
+  text-align: center;
+}
+
+.admin-controls button {
+  margin: 5px auto 0;
+
+  padding: 9px 12px;
+
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (max-width: 650px) {
+  .game,
+  .map-page {
+    padding: 25px 15px;
+  }
+
+  .map-page {
+    width: calc(100% - 20px);
+
+    margin: 10px auto;
+
+    border-width: 7px;
+  }
+
+  .map-page::before {
+    inset: 9px;
+  }
+
+  /*
+     STILL 4 COLUMNS × 3 ROWS
+     on the phone, as requested.
+  */
+  .doors {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 10px;
+
+    max-width: 100%;
+  }
+
+  .door {
+    border-width: 3px;
+
+    box-shadow: inset 0 0 0 1px rgba(255, 220, 160, 0.25),
+      3px 4px 0 rgba(65, 35, 18, 0.4);
+  }
+
+  .door::before {
+    inset: 5px;
+  }
+
+  .door::after {
+    width: 5px;
+    height: 5px;
+
+    right: 7px;
+  }
+
+  .door-complete {
+    display: none;
+  }
+
+  .door-number {
+    font-size: clamp(1.4rem, 8vw, 2.4rem);
+  }
+
+  .door.completed .door-number {
+    font-size: clamp(1.8rem, 9vw, 2.8rem);
+  }
+
+  .eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+  }
+
+  .stage-content h1 {
+    font-size: 3rem;
+  }
+
+  .admin-controls > div {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.admin-lock-bottom {
+  position: fixed;
+  top: auto;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  left: auto;
+  transform: none;
+  z-index: 1000;
+
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(30, 30, 30, 0.55);
+  color: white;
+  opacity: 0.65;
+  backdrop-filter: blur(6px);
+}
+
+.admin-lock-bottom:hover,
+.admin-lock-bottom:focus-visible {
+  opacity: 1;
+}
+.door.completed {
+  background: initial;
+}
+
+.door.completed .door-number {
+  color: #168a3e;
+  opacity: 1;
+}
+.completed-tick {
+  color: #00a83c;
+  opacity: 1;
+}
+.back-button {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  right: auto;
+  bottom: auto;
+  margin: 0;
+  transform: none;
+  z-index: 1000;
+}
