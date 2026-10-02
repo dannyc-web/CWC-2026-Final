@@ -47,6 +47,7 @@ const stages: Stage[] = [
   {
     id: 1,
     title: 'Stage 1',
+    location: '',
     question: 'Complete 1A, then 1B, then 1C.',
     history:
       'Folder Stage 1',
@@ -54,9 +55,10 @@ const stages: Stage[] = [
   {
     id: 2,
     title: 'Stage 2',
-    question: 'Go to the Cambridge South secure cycle storage. What is the link before ".../cyclestorage" ?',
+    location: '',
+    question: 'Go to the Cambridge South secure cycle storage. What is the link before ".../cyclestorage"  ?',
     history:
-      'Folder Stage 2',
+      'Folder Stage 2', 
   },
   {
     id: 3,
